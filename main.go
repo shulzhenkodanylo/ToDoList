@@ -23,9 +23,17 @@ func removeElement(slice *[]string, i int) []string {
 }
 
 func userInput() string {
-	fmt.Print("What you want to do [a]dd. [r]emove. [done]. [e]dit. [q]uit: ")
+	fmt.Print("What you want to do [a]dd. [r]emove. [d]one. [e]dit. [o]pen [q]uit: ")
 	input := scanning()
 	return input
+}
+
+func scannedTaskIndex(scannedIndex string) int {
+	index, err := strconv.Atoi(scannedIndex)
+	if err != nil {
+		fmt.Print(err)
+	}
+	return index - 1
 }
 
 func userChoice(choice string, tasks *[]string) {
@@ -35,10 +43,13 @@ func userChoice(choice string, tasks *[]string) {
 	case "r":
 		removeFromList(tasks)
 	case "d":
-
+		taskIsDone(tasks)
 	case "e":
-
+		editList(tasks)
+	case "o":
+		printList(tasks)
 	case "q":
+		os.Exit(0)
 	}
 }
 
@@ -55,28 +66,26 @@ func addToList(tasks *[]string) {
 	printList(tasks)
 }
 func removeFromList(tasks *[]string) {
-	fmt.Println("Enter task index to remove: ")
-	taskIndexToRemove := scanning()
-
-	index, err := strconv.Atoi(taskIndexToRemove)
-	if err != nil {
-		fmt.Print(err)
-	}
-
-	*tasks = removeElement(tasks, index-1)
+	fmt.Print("Enter task index to remove: ")
+	taskToRemove := scanning()
+	*tasks = removeElement(tasks, scannedTaskIndex(taskToRemove))
 	printList(tasks)
 }
 
-func editList() {
-
+func editList(tasks *[]string) {
+	fmt.Print("Enter task index to edit:")
+	taskToEdit := scanning()
+	fmt.Print("Enter edited task: ")
+	editedTask := scanning()
+	(*tasks)[scannedTaskIndex(taskToEdit)] = editedTask
+	printList(tasks)
 }
 
-func DoneCheckmark() {
-
-}
-
-func quitFromList() {
-
+func taskIsDone(tasks *[]string) {
+	fmt.Print("Enter task index to add checkmark:")
+	taskToDone := scanning()
+	(*tasks)[scannedTaskIndex(taskToDone)] = (*tasks)[scannedTaskIndex(taskToDone)] + " - ✔"
+	printList(tasks)
 }
 
 func main() {
