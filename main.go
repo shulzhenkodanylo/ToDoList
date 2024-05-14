@@ -84,8 +84,12 @@ func editList(tasks *[]string) {
 func taskIsDone(tasks *[]string) {
 	fmt.Print("Enter task index to add checkmark:")
 	taskToDone := scanning()
-	(*tasks)[scannedTaskIndex(taskToDone)] = (*tasks)[scannedTaskIndex(taskToDone)] + " - ✔"
-	printList(tasks)
+	if strings.Contains((*tasks)[scannedTaskIndex(taskToDone)], " - ✔") != true {
+		(*tasks)[scannedTaskIndex(taskToDone)] = (*tasks)[scannedTaskIndex(taskToDone)] + " - ✔"
+		printList(tasks)
+	} else {
+		fmt.Println("This task is already done or task invald itself")
+	}
 }
 
 func main() {
